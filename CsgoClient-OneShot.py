@@ -1,7 +1,5 @@
-import sqlite3
 import datetime
 import time
-import schedule
 from steam.client import SteamClient
 from csgo.client import CSGOClient
 from csgo.enums import ECsgoGCMsg
@@ -73,12 +71,5 @@ def getAllRanks():
 
     exit()
 
-# schedule.every().day.at("09:00").do(getAllRanks)
-# schedule.every(2).minutes.do(getAllRanks)
-
 client.cli_login()
 client.run_forever()
-
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
