@@ -1,0 +1,16 @@
+# The server you are using needs AWS CLI creds to access your Dynamo DB table, the just the table name and region
+
+DYNAMO_DB = {
+    "table": "TeamName-CSGO-Ranks",
+    "region": "us-east-2"
+}
+
+# Enter steam names (doesn't need to be actual steam name, just how you want the names to be) and Steam3 IDs (just the number at the end) of all users you want to get
+
+USERS = [
+    ["Gamer1", 12345678],
+    ["Gamer2", 12345679],
+    ["Gamer3", 12345670],
+    ["Gamer4", 12345671],
+    ["Gamer5", 12345672],
+]
