@@ -1,0 +1,5 @@
+steam[client]
+csgo
+schedule
+pynamodb
+timeloop
