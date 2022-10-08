@@ -1,4 +1,3 @@
-import sqlite3
 import datetime
 import time
 # from timeloop import Timeloop
@@ -20,9 +19,9 @@ class RankModel(Model):
     class Meta:
         table_name = DYNAMO_DB["table"]
         region = DYNAMO_DB["region"]
-    username = UnicodeAttribute(hash_key=True)
+    date = UnicodeAttribute(hash_key=True)
+    username = UnicodeAttribute()
     rank = UnicodeAttribute()
-    date = UnicodeAttribute()
 
 def parseRank(rankData):
 
@@ -60,10 +59,9 @@ def start_csgo():
     cs.launch()
 
 # @schedule.job(interval=timedelta(seconds=60))
-# @cs.on('ready')
 def getAllRanks():
 
-    print("Time is: " + str(datetime.datetime.now().date()))
+    print("Time is: " + str(datetime.datetime.now()))
 
     # if client.relogin_available: 
     #     client.relogin()
@@ -74,29 +72,28 @@ def getAllRanks():
         username = user[0]
         steamid = user[1]
 
-        cs.request_player_profile(steamid)
+        PlayerProfile = cs.request_player_profile(steamid)
+        time.sleep(5)
         PlayerProfile = cs.wait_event('player_profile')
         print(username + " - " + parseRank(str(PlayerProfile)))
 
-        # databaseEntry = RankModel(username, rank=parseRank(str(PlayerProfile)), date=str(datetime.datetime.now().date()))
+        # databaseEntry = RankModel(str(datetime.datetime.now().date()), username=username, rank=parseRank(str(PlayerProfile)))
         # databaseEntry.save()
 
+    time.sleep(60)
     # client.logout()
 
-# schedule.every().day.at("09:00").do(getAllRanks)
-# schedule.every(2).minutes.do(getAllRanks)
 
 client.cli_login()
+# client.run_forever()
 
-while not cs.ready:
-    print(str(cs.ready))
-    time.sleep(1)
+time.sleep(10)
+print(str(cs.ready))
 
-getAllRanks()
-
-# while True:
-#     if datetime.datetime.now():
-#         getAllRanks()
-#         time.sleep
-#     else:
-#         time.sleep(30)
+while True:
+    if datetime.datetime.now().hour == 11 and datetime.datetime.now().minute == 38:
+        print("Time matched run")
+        getAllRanks()
+    else:
+        print("No match, sleeping")
+        time.sleep(30)

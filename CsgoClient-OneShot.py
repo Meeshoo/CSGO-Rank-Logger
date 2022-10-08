@@ -14,9 +14,9 @@ class RankModel(Model):
     class Meta:
         table_name = DYNAMO_DB["table"]
         region = DYNAMO_DB["region"]
-    username = UnicodeAttribute(hash_key=True)
+    date = UnicodeAttribute(hash_key=True)
+    username = UnicodeAttribute()
     rank = UnicodeAttribute()
-    date = UnicodeAttribute()
 
 def parseRank(rankData):
 
@@ -66,7 +66,7 @@ def getAllRanks():
 
         time.sleep(5)
 
-        databaseEntry = RankModel(username, rank=parseRank(str(PlayerProfile)), date=str(datetime.datetime.now().date()))
+        databaseEntry = RankModel(str(datetime.datetime.now().date()), username=username, rank=parseRank(str(PlayerProfile)))
         databaseEntry.save()
 
     exit()
