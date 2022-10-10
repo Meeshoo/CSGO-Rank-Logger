@@ -1,19 +1,13 @@
 import datetime
 import time
-# from timeloop import Timeloop
-import schedule
-from datetime import timedelta
 from steam.client import SteamClient
 from csgo.client import CSGOClient
-from csgo.enums import ECsgoGCMsg
 from Config import USERS, DYNAMO_DB
 from pynamodb.models import Model
 from pynamodb.attributes import UnicodeAttribute
 
 client = SteamClient()
 cs = CSGOClient(client)
-
-# schedule = Timeloop()
 
 class RankModel(Model):
     class Meta:
@@ -58,42 +52,33 @@ def parseRank(rankData):
 def start_csgo():
     cs.launch()
 
-# @schedule.job(interval=timedelta(seconds=60))
 def getAllRanks():
 
     print("Time is: " + str(datetime.datetime.now()))
-
-    # if client.relogin_available: 
-    #     client.relogin()
-    # else:
-    #     client.login()
 
     for user in USERS:
         username = user[0]
         steamid = user[1]
 
-        PlayerProfile = cs.request_player_profile(steamid)
-        time.sleep(5)
-        PlayerProfile = cs.wait_event('player_profile')
+        cs.request_player_profile(steamid)
+        PlayerProfile, = cs.wait_event('player_profile')
         print(username + " - " + parseRank(str(PlayerProfile)))
 
-        # databaseEntry = RankModel(str(datetime.datetime.now().date()), username=username, rank=parseRank(str(PlayerProfile)))
-        # databaseEntry.save()
+        databaseEntry = RankModel(str(datetime.datetime.now().date()), username=username, rank=parseRank(str(PlayerProfile)))
+        databaseEntry.save()
 
-    time.sleep(60)
-    # client.logout()
+    client.sleep(60)
 
 
 client.cli_login()
-# client.run_forever()
 
 time.sleep(10)
 print(str(cs.ready))
 
 while True:
-    if datetime.datetime.now().hour == 11 and datetime.datetime.now().minute == 38:
+    if datetime.datetime.now().hour == 9 and datetime.datetime.now().minute == 30:
         print("Time matched run")
         getAllRanks()
     else:
         print("No match, sleeping")
-        time.sleep(30)
+        client.sleep(55)
