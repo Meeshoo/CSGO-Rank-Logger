@@ -61,10 +61,8 @@ def getAllRanks():
         steamid = user[1]
 
         cs.request_player_profile(steamid)
-        PlayerProfile = cs.wait_event('player_profile')
+        PlayerProfile, = cs.wait_event('player_profile')
         print(username + " - " + parseRank(str(PlayerProfile)))
-
-        time.sleep(5)
 
         databaseEntry = RankModel(str(datetime.datetime.now().date()), username=username, rank=parseRank(str(PlayerProfile)))
         databaseEntry.save()
