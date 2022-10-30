@@ -53,7 +53,6 @@ def parseRank(rankData):
 def start_csgo():
     cs.launch()
 
-@cs.on('ready')
 def getAllRanks():
 
     for user in USERS:
@@ -70,4 +69,6 @@ def getAllRanks():
     exit()
 
 client.cli_login()
-client.run_forever()
+time.sleep(10)
+
+getAllRanks()
